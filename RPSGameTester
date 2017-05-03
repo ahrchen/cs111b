@@ -1,0 +1,13 @@
+
+public class RPSGameTester {
+
+	/**
+	 * @param argsr
+	 */
+	public static void main(String[] args) {
+		RPSGame Game1 = new RPSGame();
+		Game1.gameStart();
+		
+	}
+
+}
