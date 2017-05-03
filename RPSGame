@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.*;
 public class RPSGame {
 	//ENUM
 	
@@ -16,7 +16,8 @@ public class RPSGame {
 	private int numOfComputerWins;
 	private int numOfUserWins;
 	private int numOfTies;
-
+	private boolean computerWin;
+	private boolean userWin;
 
 	private Moves computerMove;
 	private Moves userMove;
@@ -54,8 +55,11 @@ public class RPSGame {
 	}
 	//toString Method
 	public String toString(){
-		String s = "Number Of Computer Wins:" + numOfComputerWins + "\nNumber Of User Wins:" + numOfUserWins +
-				"Number of Ties:" + numOfTies;
+		String s = "User move: " + userMove + 
+				"\nComputer Move: " + computerMove +
+				"\nNumber Of Computer Wins:" + numOfComputerWins + 
+				"\nNumber Of User Wins:" + numOfUserWins +
+				"\nNumber of Ties:" + numOfTies;
 		return s;
 	}
 	//Class Specific Methods
@@ -78,11 +82,10 @@ public class RPSGame {
 	//findWinner
 	
 	public void findWinner(){
-		boolean computerWin = false;
-		boolean userWin = false;
+		computerWin = false;
+		userWin = false;
 		//need to pull in userMove
 //		Moves userMove = null;
-		generateComputerPlay();
 		if (computerMove == Moves.ROCK && userMove == Moves.SCISSORS){
 			computerWin = true;
 		} else if (computerMove == Moves.PAPER && userMove == Moves.ROCK){
@@ -104,5 +107,55 @@ public class RPSGame {
 		}else {
 			numOfTies+=1;
 		}
+	}
+	
+	public void gameStart(){
+		Scanner scan = new Scanner(System.in);
+		
+		boolean on = true;
+		while(on){
+			System.out.println("Please Select " +
+					"\nr for Rock" +
+					"\np for Paper" + 
+					"\ns for Scissors" +
+					"\nq for Quit");
+			String options = scan.nextLine();
+			switch (options) {
+			case "r":
+				userMove = Moves.ROCK;
+				break;
+			case "p":
+				userMove = Moves.PAPER;
+				break;
+			case "s":
+				userMove = Moves.SCISSORS;
+				break;
+
+			case "q":
+				on = false;
+				break;
+			default:
+				System.out.println("Invalid Choice");
+				
+			}
+			generateComputerPlay();
+			findWinner();
+			System.out.println("\n\nrUser Move: " + userMove);
+			System.out.println("Computer Move: " + computerMove + "\n");
+			if (computerWin == true){
+				System.out.println("Computer Wins\n");
+			}else if(userWin == true){
+				System.out.println("You Win\n");
+			}else {
+				System.out.println("Tie\n");
+			}
+			System.out.println("Number Of Computer Wins:" + numOfComputerWins + 
+				"\nNumber Of User Wins:" + numOfUserWins +
+				"\nNumber of Ties:" + numOfTies + "\n\n");
+		}
+		
+
+		
+		
 	}
 }
