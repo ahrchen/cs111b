@@ -1,3 +1,10 @@
+//Group Project 4
+//Raymond Chen
+//Maureen Wong
+//Nian Liu
+
+//Runs RPSGame Class and performs betting extra credit
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -110,7 +117,8 @@ public class RPSGUIGame extends JFrame {
 	/* determines which button was clicked and updates the game accordingly */
 	private class GameListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			betting();
+			betting();//call betting related functions
+			//get user play from GUI
 			if (event.getSource() == rockButton){
 				userPlay.setIcon(rockImage);
 				game.setUserMove(RPSGame.Moves.ROCK);
@@ -121,14 +129,13 @@ public class RPSGUIGame extends JFrame {
 				userPlay.setIcon(scissorsImage);
 				game.setUserMove(RPSGame.Moves.SCISSORS);
 			}
-			
-			computerPlay();
-			game.findWinner();
-			bettingResults();
-			updateGameStats();
+			computerPlay();//get computer play
+			game.findWinner();//determine the winner 
+			game.bettingResults();//update user balance after end of game
+			updateGameStatus();//update the labels to reflect current status of game
 			
 	}
-		
+	//method for betting related function, display betting messages
 	private void betting(){
 		int userChoice = JOptionPane.showConfirmDialog(null, "Would you like to place a bet? ");
 		if(userChoice==JOptionPane.YES_OPTION){
@@ -145,10 +152,7 @@ public class RPSGUIGame extends JFrame {
 		}
 		
 	}
-	
-	private void bettingResults(){
-		game.bettingResults();
-	}
+	//call RPSGame class to generate computer play and update image
 	private void computerPlay(){
 		RPSGame.Moves compMove = game.generateComputerPlay();
 		if (compMove == RPSGame.Moves.ROCK){
@@ -159,8 +163,8 @@ public class RPSGUIGame extends JFrame {
 			compPlay.setIcon(scissorsImage);
 		}
 	}
-	
-	private void updateGameStats(){
+	//update the GameStatus
+	private void updateGameStatus(){
 		outcome.setText("Winner: " + game.getWinner());
 		statusC.setText("Computer Wins: " + game.getNumOfComputerWins());
 		statusU.setText("User Wins: " + game.getNumOfUserWins());
