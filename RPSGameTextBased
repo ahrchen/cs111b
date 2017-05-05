@@ -1,3 +1,10 @@
+//Group Project 4
+//Raymond Chen
+//Maureen Wong
+//Nian Liu
+
+//Class to Run PRSGameTester
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -50,12 +57,36 @@ public class RPSGameTextBased {
 	public int getNumOfTies(){
 		return numOfTies;
 	}
+	public int getNumRounds(){
+		return numRounds;
+	}
 	public double getBetAmount(){
 		return betAmount;
 	}
 	public double getUserBalance(){
 		return userBalance;
 	}
+	
+	public boolean getComputerWin(){
+		return computerWin;
+	}
+	
+	public boolean getUserWin(){
+		return userWin;
+	}
+	
+	public Moves getComputerMove(){
+		return computerMove;
+	}
+	
+	public Moves getUserMove(){
+		return userMove;
+	}
+	
+	public String getWinner(){
+		return winner;
+	}
+	
 	//Setters
 	public void setNumOfComputerWins(int numOfComputerWins){
 		this.numOfComputerWins=numOfComputerWins;
@@ -66,11 +97,14 @@ public class RPSGameTextBased {
 	public void setNumOfTies(int numOfTies){
 		this.numOfTies=numOfTies;
 	}
-	public void setUserMove(Moves userMove){
-		this.userMove = userMove;
+	public void setNumRounds(int numRounds){
+		this.numRounds = numRounds;
 	}
-	public void setWinner(String winner){
-		this.winner = winner;
+	public void setBetAmount(double betAmount){
+		this.betAmount = betAmount;
+	}
+	public void setUserBalance(double userBalance){
+		this.userBalance = userBalance;
 	}
 	public void setComputerWin(boolean winner){
 		this.computerWin = winner;
@@ -78,10 +112,16 @@ public class RPSGameTextBased {
 	public void setUserWin(boolean winner){
 		this.userWin = winner;
 	}
-	public void setBetAmount(double betAmount){
-		this.betAmount = betAmount;
+	public void setComputerMove(Moves computerMove){
+		this.computerMove=computerMove;
 	}
-	
+	public void setUserMove(Moves userMove){
+		this.userMove = userMove;
+		
+	}
+	public void setWinner(String winner){
+		this.winner = winner;
+	}
 	//toString Method
 	public String toString(){
 		String s = "Number Of Computer Wins:" + numOfComputerWins + "\nNumber Of User Wins:" + numOfUserWins +
@@ -143,8 +183,6 @@ public class RPSGameTextBased {
 	public String findWinner(){
 		computerWin = false;
 		userWin = false;
-		//need to pull in userMove
-//		Moves userMove = null;
 		if (computerMove == Moves.ROCK && userMove == Moves.SCISSORS){
 			computerWin = true;
 			setComputerWin(true);
@@ -179,7 +217,7 @@ public class RPSGameTextBased {
 		
 		return winner;
 	}
-	//betting
+	//betting function ask user to place bet
 	public double betting(){
 		//Ask Betting
 		System.out.println("Would you like to place a bet? y/n");
@@ -204,7 +242,7 @@ public class RPSGameTextBased {
 		}
 		return betAmount;
 	}
-
+	//betting results update balance
 	public void bettingResults(){
 			if(userWin == true){
 				userBalance += betAmount;
@@ -239,34 +277,28 @@ public class RPSGameTextBased {
 	
 	
 	
-
-		
-		
-	
 	//TextBasedGamePlay
 	public void textBasedGameStart(){
+		//determine if user would like to play game 
 			Scanner scan = new Scanner(System.in);
-			boolean playing = true;
 			
-			while(playing){
+			boolean playing;
+			do{
+				numRounds++;
+				betting();//check with user if he or she would like to place a bet
+				generateUserPlay();//pull in user move
+				generateComputerPlay();//generate computer move
+				findWinner();//determine winner
+				bettingResults();//update betting outcome 
+				textOutput();//output text
 			System.out.println("Do you want to play Rock Paper Scissors? y/n");
 			String play = scan.nextLine();
-			if (play.equalsIgnoreCase("y")){
+				if (play.equalsIgnoreCase("y")){
 				playing = true;
-			} else {
+				} else {
 				playing = false;
-				break;
-			}
-			numRounds++;
-			betting();
-			generateUserPlay();
-			generateComputerPlay();
-			findWinner();
-			bettingResults();
-			textOutput();
-			
-			
-		}	
+				}
+			}while(playing);
 	}
 }			
 
