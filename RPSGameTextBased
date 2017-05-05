@@ -1,0 +1,272 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class RPSGameTextBased {
+	//ENUM
+	
+	static enum Moves {
+		ROCK, 
+		PAPER, 
+		SCISSORS;
+	};
+	
+	//instantiate randomNum
+	Random randomNum =  new Random();
+	
+	
+	//Declare Instance Data Variables 
+	private int numOfComputerWins;
+	private int numOfUserWins;
+	private int numOfTies;
+	private int numRounds;
+	
+	private double userBalance = 100;
+	private double betAmount;
+	
+	private boolean computerWin;
+	private boolean userWin;
+
+	
+	private Moves computerMove;
+	private Moves userMove;
+	
+	private String winner;
+
+	
+	//Constructor
+	public RPSGameTextBased(){
+		numOfComputerWins=0;
+		numOfUserWins=0;
+		numOfTies=0;
+	}
+	//Getter and Setters
+	//Getters
+	public int getNumOfComputerWins(){
+		return numOfComputerWins;
+	}
+	public int getNumOfUserWins(){
+		return numOfUserWins;
+	}
+	public int getNumOfTies(){
+		return numOfTies;
+	}
+	public double getBetAmount(){
+		return betAmount;
+	}
+	public double getUserBalance(){
+		return userBalance;
+	}
+	//Setters
+	public void setNumOfComputerWins(int numOfComputerWins){
+		this.numOfComputerWins=numOfComputerWins;
+	}
+	public void setNumOfUserWins(int numOfUserWins){
+		this.numOfUserWins=numOfUserWins;
+	}
+	public void setNumOfTies(int numOfTies){
+		this.numOfTies=numOfTies;
+	}
+	public void setUserMove(Moves userMove){
+		this.userMove = userMove;
+	}
+	public void setWinner(String winner){
+		this.winner = winner;
+	}
+	public void setComputerWin(boolean winner){
+		this.computerWin = winner;
+	}
+	public void setUserWin(boolean winner){
+		this.userWin = winner;
+	}
+	public void setBetAmount(double betAmount){
+		this.betAmount = betAmount;
+	}
+	
+	//toString Method
+	public String toString(){
+		String s = "Number Of Computer Wins:" + numOfComputerWins + "\nNumber Of User Wins:" + numOfUserWins +
+				"Number of Ties:" + numOfTies;
+		return s;
+	}
+	//Class Specific Methods
+	
+	//generateComputerPlay
+	
+	public Moves generateComputerPlay(){
+		int randomNumber = randomNum.nextInt(3);
+
+		if (randomNumber == 0) {
+		computerMove = Moves.ROCK;
+		}else if (randomNumber == 1) {
+		computerMove = Moves.PAPER;
+		}else{
+		computerMove = Moves.SCISSORS;
+		}
+		return computerMove;
+	}
+	
+	//generateUserPlay
+	
+	public Moves generateUserPlay(){
+		Scanner scan = new Scanner(System.in);
+			System.out.println("Please Select " +
+					"\nr for Rock" +
+					"\np for Paper" + 
+					"\ns for Scissors" +
+					"\nq for Quit");
+			boolean userChoice = true;
+			while(userChoice){
+			String options = scan.nextLine();
+			switch (options) {
+			case "r":
+				userMove = Moves.ROCK;
+				userChoice = false;
+				break;
+			case "p":
+				userMove = Moves.PAPER;
+				userChoice = false;
+				break;
+			case "s":
+				userMove = Moves.SCISSORS;
+				userChoice = false;
+				break;
+			default:
+				System.out.println("Invalid Choice");
+			}
+			}
+		return userMove;
+	}
+	
+	
+	//findWinner
+	
+	public String findWinner(){
+		computerWin = false;
+		userWin = false;
+		//need to pull in userMove
+//		Moves userMove = null;
+		if (computerMove == Moves.ROCK && userMove == Moves.SCISSORS){
+			computerWin = true;
+			setComputerWin(true);
+		} else if (computerMove == Moves.PAPER && userMove == Moves.ROCK){
+			computerWin = true;
+			setComputerWin(true);
+		} else if (computerMove == Moves.SCISSORS && userMove == Moves.PAPER){
+			computerWin = true;
+			setComputerWin(true);
+		} else if (userMove == Moves.ROCK && computerMove == Moves.SCISSORS){
+			userWin = true;
+			setUserWin(true);
+		} else if (userMove == Moves.PAPER && computerMove == Moves.ROCK){
+			userWin = true;
+			setUserWin(true);
+		} else if (userMove == Moves.SCISSORS && computerMove == Moves.PAPER){
+			userWin = true;
+			setUserWin(true);
+		} 
+		
+		winner = "";
+		if (computerWin == true){
+			numOfComputerWins+=1;
+			winner = "Computer Wins";
+		} else if (userWin == true){
+			numOfUserWins+=1;
+			winner = "User Wins";
+		}else {
+			numOfTies+=1;
+			winner = "Tie Game";
+		}
+		
+		return winner;
+	}
+	//betting
+	public double betting(){
+		//Ask Betting
+		System.out.println("Would you like to place a bet? y/n");
+		Scanner scan = new Scanner(System.in);
+		
+		String bet = scan.nextLine();
+		
+		boolean betting;
+		
+		if (bet.equalsIgnoreCase("y")){
+
+		System.out.println("Your Account Balance is:" + userBalance + 
+				"\nPlease Select Amount for Betting: ");
+		betAmount = Double.parseDouble(scan.nextLine());
+		while (betAmount > userBalance){
+			System.out.println("Betting Amount Above User Balance: " + userBalance + 
+					"\nPlease Select Another Amount for Betting: ");
+			betAmount = Double.parseDouble(scan.nextLine());
+			}
+		}else {
+			betAmount = 0;
+		}
+		return betAmount;
+	}
+
+	public void bettingResults(){
+			if(userWin == true){
+				userBalance += betAmount;
+			} else if (computerWin == true) {
+				userBalance -= betAmount;
+			} else {
+				userBalance = userBalance;
+			}
+		}
+	
+	//textOutput
+	public void textOutput(){
+		//Display Moves
+		System.out.println("\n\tDISPLAY MOVES: " + 
+		"\n\tUser Move: " + userMove +
+		"\n\tComputer Move: " + computerMove + "\n");
+		
+		//Display Winner
+		System.out.println("\n\tDISPLAY WINNER: " +
+		"\n\t" + winner);
+		
+		//Display Game Status
+		System.out.println("\n\n\tGAMESTATUS: ROUND " + numRounds +
+			"\n\tNumber Of Computer Wins:" + numOfComputerWins + 
+			"\n\tNumber Of User Wins:" + numOfUserWins +
+			"\n\tNumber of Ties:" + numOfTies + "\n\n");
+		
+		//Display Betting Outcomes
+		System.out.println("\n\tBETTING OUTCOMES: " +
+		"\n\tCurrent Balance: " + userBalance);
+	}
+	
+	
+	
+
+		
+		
+	
+	//TextBasedGamePlay
+	public void textBasedGameStart(){
+			Scanner scan = new Scanner(System.in);
+			boolean playing = true;
+			
+			while(playing){
+			System.out.println("Do you want to play Rock Paper Scissors? y/n");
+			String play = scan.nextLine();
+			if (play.equalsIgnoreCase("y")){
+				playing = true;
+			} else {
+				playing = false;
+				break;
+			}
+			numRounds++;
+			betting();
+			generateUserPlay();
+			generateComputerPlay();
+			findWinner();
+			bettingResults();
+			textOutput();
+			
+			
+		}	
+	}
+}			
+
